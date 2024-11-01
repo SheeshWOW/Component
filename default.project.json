@@ -1,0 +1,31 @@
+{
+  "name": "SoulsOfWar",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "$path": "src/ReplicatedStorage",
+      
+      "Component": {
+          "$path": "src/Component",
+
+          "Packages": {
+            "$className": "Folder",
+            "$path": "Packages"
+          }
+      },
+
+      "SharedComponents": {
+        "$className": "Folder",
+        "$path": "src/SharedComponents"
+      }
+    },
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "$path": "src/ServerScriptService"
+    },
+    "Workspace": {
+      "$ignoreUnknownInstances": true
+    }
+  }
+}

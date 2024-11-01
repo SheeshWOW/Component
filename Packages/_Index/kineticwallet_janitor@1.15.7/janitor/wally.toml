@@ -1,0 +1,13 @@
+[package]
+name = "kineticwallet/janitor"
+description = "A typed version of howmanysmall's janitor package."
+version = "1.15.7"
+license = "MIT"
+authors = ["howmanysmall", "kineticwallet"]
+realm = "shared"
+registry = "https://github.com/upliftgames/wally-index"
+exclude = []
+private = false
+
+[dependencies]
+Promise = "kineticwallet/promise@4.0.0"

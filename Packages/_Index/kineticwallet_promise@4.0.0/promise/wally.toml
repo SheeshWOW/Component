@@ -1,0 +1,10 @@
+[package]
+name = "kineticwallet/promise"
+description = "A typed version of evaera's promise package."
+version = "4.0.0"
+license = "MIT"
+authors = ["evaera", "kineticwallet"]
+realm = "shared"
+registry = "https://github.com/upliftgames/wally-index"
+exclude = []
+private = false
