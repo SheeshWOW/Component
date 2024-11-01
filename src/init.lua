@@ -7,7 +7,7 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 
 local Root = script
-local Packages = Root.Packages
+local Packages = Root.Parent
 
 local Types = require(Root.Types)
 

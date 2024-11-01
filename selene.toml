@@ -1,4 +1,4 @@
 std = "roblox"
 
 [lints]
-unused_variable = "allow" # I'm fine with unused variables in code
+unused_variable = "allow"

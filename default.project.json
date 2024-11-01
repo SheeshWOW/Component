@@ -1,13 +1,6 @@
 {
-  "name": "SoulsOfWar",
+  "name": "Component",
   "tree": {
-    "$className": "DataModel",
-    "Component": {
-        "$path": "src/Component",
-        "Packages": {
-          "$className": "Folder",
-          "$path": "Packages"
-        }
-    }
+    "$path": "src"
   }
 }

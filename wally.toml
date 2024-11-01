@@ -1,9 +1,9 @@
 [package]
 name = "sheeshwow/component"
-version = "0.0.1"
+version = "0.1.7"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
-description = "Contribution to sleitnick's component. Added some methods and GUID catching. Added pointers"
+description = "Contribution to sleitnick's component. Added some methods and GUID catching. Added pointers. [WIP]"
 
 [dependencies]
 Promise = "kineticwallet/promise@4.0.0"

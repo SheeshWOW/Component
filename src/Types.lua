@@ -1,5 +1,5 @@
 local Root = script.Parent
-local Packages = Root.Packages
+local Packages = Root.Parent
 
 local Promise = require(Packages.Promise)
 local Signal = require(Packages.Signal)
