@@ -22,6 +22,7 @@ type Value<T> = Types.Value<T>
 local IS_SERVER = RunService:IsServer()
 local DEFAULT_ANCESTORS = { workspace, game:GetService("Players") }
 local DEFAULT_TIMEOUT = 10
+local DEFAULT_TABLE_DEPTH = 4
 
 -- Function that makes table readonly (means can't be changed)
 local function ReadOnlyTable<T>(tab: { T }): T
@@ -77,6 +78,12 @@ local renderId = 0
 local function NextRenderName(): string
 	renderId += 1
 	return "ComponentRender_" .. tostring(renderId)
+end
+
+local logId = 0
+local function NextLogName(): string
+	logId += 1
+	return "LogValue_" .. tostring(logId)
 end
 
 local function InvokeExtensionFn(component, fnName: string)
@@ -211,6 +218,13 @@ function Component:_instantiate(instance: Instance)
 	component.GUID = CreateGUID()
 	component.Instance:SetAttribute("GUID", component.GUID)
 
+	component.LogsFolder = Instance.new("Folder")
+	component.LogsFolder.Name = "LogsFolder"
+	component.LogsFolder.Parent = component.Instance
+
+	local aArgs = component.Instance:GetAttributes()
+	local dArgs = {}
+
 	component[KEY_ACTIVE_EXTENSIONS] = GetActiveExtensions(component, self[KEY_EXTENSIONS])
 
 	if not ShouldConstruct(component) then
@@ -220,7 +234,7 @@ function Component:_instantiate(instance: Instance)
 	InvokeExtensionFn(component, "Constructing")
 
 	if type(component.Construct) == "function" then
-		component:Construct()
+		component:Construct(aArgs, dArgs)
 	end
 
 	InvokeExtensionFn(component, "Constructed")
@@ -494,6 +508,70 @@ end
 
 function Component:Destroy()
 	self[KEY_JANITOR]:Destroy()
+end
+
+function Component:Log(defaultValue: any, defaultName: string?)
+	local createInstance, logTable, logInternal = nil, nil, nil
+	defaultName = defaultName or NextLogName()
+
+	function createInstance(value, name)
+		local instance
+
+		if type(value) == "string" then
+			instance = Instance.new("StringValue")
+			instance.Value = value
+		elseif type(value) == "number" then
+			instance = Instance.new("NumberValue")
+			instance.Value = value
+		elseif type(value) == "boolean" then
+			instance = Instance.new("BoolValue")
+			instance.Value = value
+		elseif type(value) == "table" then
+			instance = Instance.new("Folder")
+			instance.Name = name or "TableData"
+		else
+			instance = Instance.new("StringValue")
+			instance.Value = "Unsupported type"
+		end
+
+		if instance then
+			instance.Name = name or "DefaultName"
+		end
+
+		return instance
+	end
+
+	function logInternal(value, name, depth, parent)
+		local existingInstance = parent:FindFirstChild(name)
+		if existingInstance then
+			existingInstance:Destroy()
+		end
+
+		if type(value) == "table" then
+			logTable(value, name, depth, parent)
+		else
+			local instance = createInstance(value, name)
+			if instance then
+				instance.Parent = parent
+			end
+		end
+	end
+
+	function logTable(value, name, depth, parent)
+		if depth >= DEFAULT_TABLE_DEPTH then
+			return
+		end
+
+		local tableInstance = createInstance(value, name)
+		tableInstance.Parent = parent
+
+		for key, val in pairs(value) do
+			logInternal(val, tostring(key), depth + 1, tableInstance)
+		end
+	end
+
+	-- Запуск логирования
+	logInternal(defaultValue, defaultName, 0, self.LogsFolder)
 end
 
 function Component:CreateComponentPointer(): Types.ComponentPointer
